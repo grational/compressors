@@ -1,0 +1,3 @@
+= compression-decorators
+
+A 'gigawatt' powered project.
