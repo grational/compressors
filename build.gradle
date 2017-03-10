@@ -28,8 +28,7 @@ project.ext {
 	gradleVersion       = '3.4.1'
 	spockVersion        = '1.0-groovy-2.4'
 	codenarcVersion     = '0.24.1'
-	slf4jVersion        = '1.7.21'
-
+	slf4jVersion        = '1.7.24'
 }
 
 project.with {
