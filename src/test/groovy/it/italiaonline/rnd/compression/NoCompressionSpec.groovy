@@ -4,13 +4,12 @@ import spock.lang.Specification
 import spock.lang.Shared
 
 /**
- * The GZipEngine class should compress and encode base64
- * the string passed as input
+ * The NoCompression class should be a no-operation filter
  */
-class GZipEngineSpec extends Specification {
+class NoCompressionSpec extends Specification {
 
 	@Shared
-	GZipEngine gze = new GZipEngine()
+	NoCompression nc = new NoCompression()
 
 	@Shared
 	String longString = """\
@@ -25,11 +24,11 @@ class GZipEngineSpec extends Specification {
 	 * The compressed string should be smaller that the
 	 * uncompressed one.
 	 */
-	def "Should correctly reduce the length of a string"() {
+	def "Use the compress method should keep the string exactly the same"() {
 		when:
-			String compressed = gze.compress(longString)
+			String notReallyCompressed = nc.compress(longString)
 		then:
-			compressed.size() < longString.size()
+			notReallyCompressed == longString
 	}
 
 	/**
@@ -38,8 +37,8 @@ class GZipEngineSpec extends Specification {
 	 */
 	def "Uncompressing a compressed string should return the original string"() {
 		when:
-			String compressed   = gze.compress(longString)
-			String uncompressed = gze.uncompress(compressed)
+			String compressed   = nc.compress(longString)
+			String uncompressed = nc.uncompress(compressed)
 		then:
 			longString == uncompressed
 	}
