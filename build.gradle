@@ -8,35 +8,33 @@
 plugins {
 	// support for groovy
 	id 'groovy'
-	// autogenerate eclipse project files
-	id 'eclipse'
-	// create an html index linking every report generated
-	id 'build-dashboard'
-	// view of the project (jars used, navigable source tree)
-	id 'project-report'
+	// required by jitpack
+	id 'maven-publish'
 	// groovy code linter
 	id 'codenarc'
-	// test code coverage plugin
-	id 'net.saliman.cobertura' version '2.5.4'
 	// awesome git tag / gradle version integration
-	id 'pl.allegro.tech.build.axion-release' version '1.9.1'
+	id 'pl.allegro.tech.build.axion-release' version '1.13.3'
 }
 
 // [general] configuration
 project.ext {
-	groovyVersion       = '2.4.9'
-	gradleVersion       = '3.4.1'
-	spockVersion        = '1.0-groovy-2.4'
-	codenarcVersion     = '0.24.1'
-	slf4jVersion        = '1.7.24'
+	groovyVersion   = '3.0.9'
+	spockVersion    = '2.0-groovy-3.0'
+	codenarcVersion = '2.2.0'
+	slf4jVersion    = '1.7.32'
+}
+
+scmVersion {
+	tag {
+		prefix = 'release-'
+	}
 }
 
 project.with {
 	//project.name is set in the settings.gradle with rootProject.name
-	group                 "it.italiaonline.rnd"
-	version               scmVersion.version // '0.5.0' (remove -SNAPSHOT for releases)
-	description           "A 'gigawatt' powered project."
-	wrapper.gradleVersion "$gradleVersion"
+	group       "it.grational"
+	version     scmVersion.version // '0.5.0' (remove -SNAPSHOT for releases)
+	description 'Compress and uncompress easily'
 }
 // [crosscompile] source and target java version
 allprojects {
@@ -50,13 +48,33 @@ repositories {
 
 dependencies {
 	// Groovy language support
-	compile "org.codehaus.groovy:groovy-all:$groovyVersion"
-
-	// Slf4j dependencies
-	compile "org.slf4j:slf4j-api:$slf4jVersion"
+	implementation (
+		"org.codehaus.groovy:groovy:$groovyVersion",
+		"org.slf4j:slf4j-api:$slf4jVersion"
+	)
 
 	// We use the awesome Spock testing and specification framework
-	testCompile "org.spockframework:spock-core:$spockVersion"
+	testImplementation (
+		"org.spockframework:spock-core:$spockVersion"
+	)
+}
+
+// [tasks] configuration //
+tasks.withType(Test) {
+	useJUnitPlatform()
+	maxParallelForks = Runtime.runtime.availableProcessors() / 2
+}
+
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			groupId = 'com.github.grational'
+			artifactId = 'connection-decorators'
+			version = scmVersion.version // '0.5.0' (remove -SNAPSHOT for releases)
+
+			from components.java
+		}
+	}
 }
 
 // codenarc groovy source analyses
@@ -89,18 +107,6 @@ jar {
 check {
 	// clean before check
 	dependsOn 'clean'
-	// create the code coverage report
-	dependsOn 'cobertura'
-	// set the correct order for the dep tasks
-	tasks.findByName('cobertura').mustRunAfter 'clean'
-}
-
-// [tasks] definition
-task listJars {
-	description = 'print out the jars used by the project'
-	doLast {
-		configurations.compile.each { File file -> println file.name }
-	}
 }
 
 // vim: ft=groovy:fdm=indent

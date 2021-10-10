@@ -1,6 +1,6 @@
-package it.italiaonline.rnd.compression
+package it.grational.compression
 
-interface CompressionEngine {
+interface Compressor {
 	String compress(String input)
 	String uncompress(String compressedInput)
 }

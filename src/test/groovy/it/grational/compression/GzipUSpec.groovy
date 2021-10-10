@@ -1,16 +1,16 @@
-package it.italiaonline.rnd.compression
+package it.grational.compression
 
 import spock.lang.Specification
 import spock.lang.Shared
 
 /**
- * The GZipEngine class should compress and encode base64
+ * The Gzip class should compress and encode base64
  * the string passed as input
  */
-class GZipEngineSpec extends Specification {
+class GzipUSpec extends Specification {
 
 	@Shared
-	GZipEngine gze = new GZipEngine()
+	Gzip gze = new Gzip()
 
 	@Shared
 	String longString = """\
