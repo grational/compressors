@@ -1,3 +1,6 @@
-= compression-decorators
+= compressors
 
-A 'gigawatt' powered project.
+The project offers a generic interface `Compressor` and a couple of its implementations:
+
+. `Gzip` that uses the popular gzip algorithm implemented in the `JDK` created by _Jean-loup Gailly_ and _Mark Adler_.
+. `NoCompression` to be used when we want to leverage the Compressor interface without actually touching the data. It could be useful sparingly to maintain the readability of the stored data.

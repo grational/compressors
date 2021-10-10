@@ -1,4 +1,4 @@
-package it.italiaonline.rnd.compression
+package it.grational.compression
 
 import spock.lang.Specification
 import spock.lang.Shared
@@ -6,7 +6,7 @@ import spock.lang.Shared
 /**
  * The NoCompression class should be a no-operation filter
  */
-class NoCompressionSpec extends Specification {
+class NoCompressionUSpec extends Specification {
 
 	@Shared
 	NoCompression nc = new NoCompression()

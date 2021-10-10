@@ -1,11 +1,9 @@
-package it.italiaonline.rnd.compression
+package it.grational.compression
 
 import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
 
-class GZipEngine implements CompressionEngine {
-
-	GZipEngine() {}
+class Gzip implements Compressor {
 
 	String compress(String input){
 		def targetStream = new ByteArrayOutputStream()
@@ -17,17 +15,17 @@ class GZipEngine implements CompressionEngine {
 		def zippedBytes = targetStream.toByteArray()
 		targetStream.close()
 
-		def compressedString = zippedBytes.encodeBase64()
+		String compressedString = zippedBytes.encodeBase64()
 		return compressedString
 	}
 
 	String uncompress(String compressedInput) {
-		def inflaterStream = new GZIPInputStream(
-		                       new ByteArrayInputStream(
-		                         compressedInput.decodeBase64()
-		                       )
-		                     )
-		def uncompressedString = inflaterStream.getText('UTF-8')
+		def inflaterStream = new GZIPInputStream (
+			new ByteArrayInputStream (
+				compressedInput.decodeBase64()
+			)
+		)
+		String uncompressedString = inflaterStream.getText('UTF-8')
 		return uncompressedString
 	}
 }
