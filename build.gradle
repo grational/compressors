@@ -10,18 +10,8 @@ plugins {
 	id 'groovy'
 	// required by jitpack
 	id 'maven-publish'
-	// groovy code linter
-	id 'codenarc'
 	// awesome git tag / gradle version integration
-	id 'pl.allegro.tech.build.axion-release' version '1.13.3'
-}
-
-// [general] configuration
-project.ext {
-	groovyVersion   = '3.0.9'
-	spockVersion    = '2.0-groovy-3.0'
-	codenarcVersion = '2.2.0'
-	slf4jVersion    = '1.7.32'
+	id 'pl.allegro.tech.build.axion-release' version '1.14.5'
 }
 
 scmVersion {
@@ -36,26 +26,20 @@ project.with {
 	version     scmVersion.version // '0.5.0' (remove -SNAPSHOT for releases)
 	description 'Compress and uncompress easily'
 }
-// [crosscompile] source and target java version
-allprojects {
-	sourceCompatibility = '1.8'
-	targetCompatibility = sourceCompatibility
-}
 
 repositories {
-	jcenter()
+	mavenCentral()
 }
 
 dependencies {
 	// Groovy language support
 	implementation (
-		"org.codehaus.groovy:groovy:$groovyVersion",
-		"org.slf4j:slf4j-api:$slf4jVersion"
+		"org.codehaus.groovy:groovy:3.0.21"
 	)
 
 	// We use the awesome Spock testing and specification framework
 	testImplementation (
-		"org.spockframework:spock-core:$spockVersion"
+		"org.spockframework:spock-core:2.3-groovy-3.0"
 	)
 }
 
@@ -65,36 +49,16 @@ tasks.withType(Test) {
 	maxParallelForks = Runtime.runtime.availableProcessors() / 2
 }
 
+// required to work with jitpack.io
 publishing {
 	publications {
 		mavenJava(MavenPublication) {
 			groupId = 'com.github.grational'
 			artifactId = 'compressors'
-			version = scmVersion.version // '0.5.0' (remove -SNAPSHOT for releases)
+			version = "release-${scmVersion.version}" // '0.5.0' (remove -SNAPSHOT for releases)
 
 			from components.java
 		}
-	}
-}
-
-// codenarc groovy source analyses
-codenarc{
-	toolVersion = "$codenarcVersion"
-
-	codenarcMain {
-		configFile = rootProject.file('config/codenarc/ruleset.groovy')
-		exclude "**/package-info.*"
-		ignoreFailures true       // does not block builds
-		maxPriority1Violations 0
-		maxPriority2Violations 10
-		maxPriority3Violations 20
-	}
-	codenarcTest {
-		configFile = rootProject.file('config/codenarc/ruleset-test.groovy')
-		ignoreFailures true
-		maxPriority1Violations 0
-		maxPriority2Violations 10
-		maxPriority3Violations 20
 	}
 }
 
